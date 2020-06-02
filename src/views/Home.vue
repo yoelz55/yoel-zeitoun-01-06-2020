@@ -17,12 +17,16 @@
       <v-layout row wrap class="justify-center">
         <v-flex xs6 sm6 md6 lg6>
           <v-card v-if="selectedCity" flat class="yellow text-xs-center ma-4">
+            <v-avatar size="300">
+              <img :src="buildPathForIcon(selectedCity.WeatherIcon)">
+            </v-avatar>
             <v-card-text>
               <div>{{selectedCity.CityName}}</div>
               <div>{{favoriteNumber}}</div>
               <div class="subheading">{{selectedCity.WeatherText}}</div>
               <div class="grey--text">{{selectedCity.EpochTime}}</div>
             </v-card-text>
+            
           </v-card>
         </v-flex>
         <v-flex></v-flex>
@@ -38,6 +42,9 @@
       <v-layout row wrap v-if="dailyForecasts" class="mt-4">
         <v-flex xs12 sm6 md4 class="lg5-custom" v-for="daily in dailyForecasts" :key="daily.Date">
           <v-card flat class="red text-xs-center ma-3">
+            <v-avatar size="50">
+              <img :src="buildPathForIcon(daily.Day.Icon)" :alt="daily.Day.IconPhrase">
+            </v-avatar>
             <v-card-text>
               <div class="subheading">{{daily.Date}}</div>
               <div class="grey--text">{{daily.Day.IconPhrase}}</div>
@@ -58,8 +65,7 @@ export default {
       entries: [],
       isLoading: false,
       search: null,
-      items: [],
-      selectedCityName: "Tel-Aviv"
+      items: []
     };
   },
   computed: {
@@ -267,7 +273,6 @@ export default {
       if(!this.isEnglish(this.search)){
         console.log('incondition')
         this.search = '';
-        
         return;
       }
        console.log('past')
@@ -352,6 +357,11 @@ export default {
     }
   },
   methods: {
+    buildPathForIcon(iconNum){
+
+      return require(`../assets/weather-icons/${iconNum}-s.png`)
+
+    },
     isEnglish(str){
       const english = /^[A-Za-z0-9_ ]+$/
       return  english.test(str);
