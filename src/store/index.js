@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     favoriteCity: [],
     selectedCity: null,
-    dailyForecasts: null
+    dailyForecasts: null,
+    isCelsius: true
   },
   getters: {
     favoriteCity: state => {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     dailyForecasts: state => {
       return state.dailyForecasts;
+    },
+    isCelsius: state => {
+      return state.isCelsius;
     }
   },
   mutations: {
@@ -33,9 +37,15 @@ export default new Vuex.Store({
     },
     setForecast(state, dailyForecasts){
       state.dailyForecasts = dailyForecasts;
+    },
+    toggleUnit(state){
+      state.isCelsius = !state.isCelsius;
     }
   },
   actions: {
+    toggleUnit({commit}){
+      commit('toggleUnit');
+    },
     setSelectedCity({ commit }, selectedCity) {
       commit('setSelectedCity', selectedCity)
     },
@@ -53,6 +63,4 @@ export default new Vuex.Store({
       commit('setForecast', await get5DaysForecastsWeather(cityID, cityName));
     },
   },
-  modules: {
-  }
 })

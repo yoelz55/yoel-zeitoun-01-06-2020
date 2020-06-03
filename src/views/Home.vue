@@ -1,36 +1,27 @@
 <template>
   <div class="home">
     <v-container>
+      
       <v-autocomplete
+        class="pa-3"
         v-model="searchCity"
         :items="items"
         :loading="isLoading"
         :search-input.sync="search"
-        color="white"
+        :color="autocompleteColor"
         hide-no-data
-        label="Public APIs"
+        label="City"
         placeholder="Start typing to Search"
-        prepend-icon="mdi-database-search"
+        prepend-icon="mdi-magnify"
         @input="handleUserChoice"
       ></v-autocomplete>
-
+     
       <v-layout row wrap class="justify-center">
-        <v-flex xs6 sm6 md6 lg6>
-          <v-card v-if="selectedCity" flat class="yellow text-xs-center ma-4">
-            <v-avatar size="300">
-              <img :src="buildPathForIcon(selectedCity.WeatherIcon)">
-            </v-avatar>
-            <v-card-text>
-              <div>{{selectedCity.CityName}}</div>
-              <div>{{favoriteNumber}}</div>
-              <div class="subheading">{{selectedCity.WeatherText}}</div>
-              <div class="grey--text">{{selectedCity.EpochTime}}</div>
-            </v-card-text>
-            
-          </v-card>
+        <v-flex xs10 sm10 md8 lg6 v-if="selectedCity">
+          <CityCard :city="selectedCity" :weatherPic="buildPathForIcon(selectedCity.WeatherIcon)"></CityCard>
         </v-flex>
-        <v-flex></v-flex>
-        <v-flex xs3 sm3 md3 lg3 v-if="selectedCity">
+        
+        <v-flex xs3 sm2 md3 lg3 v-if="selectedCity">
           <v-avatar class="mr-2">
             <v-icon :class="{red: isSelectedFavorite}">mdi-heart</v-icon>
           </v-avatar>
@@ -39,17 +30,9 @@
         </v-flex>
       </v-layout>
 
-      <v-layout row wrap v-if="dailyForecasts" class="mt-4">
-        <v-flex xs12 sm6 md4 class="lg5-custom" v-for="daily in dailyForecasts" :key="daily.Date">
-          <v-card flat class="red text-xs-center ma-3">
-            <v-avatar size="50">
-              <img :src="buildPathForIcon(daily.Day.Icon)" :alt="daily.Day.IconPhrase">
-            </v-avatar>
-            <v-card-text>
-              <div class="subheading">{{daily.Date}}</div>
-              <div class="grey--text">{{daily.Day.IconPhrase}}</div>
-            </v-card-text>
-          </v-card>
+      <v-layout row wrap class="justify-center mt-4" v-if="dailyForecasts" >
+        <v-flex xs11 sm10 md3 class="lg5-custom ma-3" v-for="daily in dailyForecasts" :key="daily.Date">
+          <ForecastCard :dailyWeather="daily" :weatherPic="buildPathForIcon(daily.Day.Icon)"></ForecastCard>
         </v-flex>
       </v-layout>
     </v-container>
@@ -57,8 +40,14 @@
 </template>
 
 <script>
-//import { getAutoCompleteWeather } from "../api/weatherApi";
+import CityCard from '../components/cards/CityCard'
+import ForecastCard from '../components/cards/ForecastCard'
+import { getAutoCompleteWeather } from "../api/weatherApi";
 export default {
+  components:{
+    CityCard,
+    ForecastCard
+  },
   data() {
     return {
       searchCity: null,
@@ -69,197 +58,15 @@ export default {
     };
   },
   computed: {
+
     selectedCity() {
       return this.$store.getters.selectedCity;
-      //   return {
-      //   CityID: '215854',
-      //   LocalObservationDateTime: "2020-06-02T10:06:00+03:00",
-      //   EpochTime: 1591081560,
-      //   WeatherText: "Mostly cloudy",
-      //   WeatherIcon: 6,
-      //   HasPrecipitation: false,
-      //   PrecipitationType: null,
-      //   IsDayTime: true,
-      //   Temperature: {
-      //     Metric: {
-      //       Value: 28.3,
-      //       Unit: "C",
-      //       UnitType: 17
-      //     },
-      //     Imperial: {
-      //       Value: 83,
-      //       Unit: "F",
-      //       UnitType: 18
-      //     }
-      //   },
-      //   MobileLink:
-      //     "http://m.accuweather.com/en/il/tel-aviv/215854/current-weather/215854?lang=en-us",
-      //   Link:
-      //     "http://www.accuweather.com/en/il/tel-aviv/215854/current-weather/215854?lang=en-us"
-      // };
     },
     dailyForecasts() {
       return this.$store.getters.dailyForecasts;
-
-      //     return [{
-      //     "Date": "2020-06-02T07:00:00+03:00",
-      //     "EpochDate": 1591070400,
-      //     "Temperature": {
-      //       "Minimum": {
-      //         "Value": 66,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       },
-      //       "Maximum": {
-      //         "Value": 85,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       }
-      //     },
-      //     "Day": {
-      //       "Icon": 1,
-      //       "IconPhrase": "Sunny",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Night": {
-      //       "Icon": 35,
-      //       "IconPhrase": "Partly cloudy",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Sources": [
-      //       "AccuWeather"
-      //     ],
-      //     "MobileLink": "http://m.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=1&lang=en-us",
-      //     "Link": "http://www.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=1&lang=en-us"
-      //   },
-      //   {
-      //     "Date": "2020-06-03T07:00:00+03:00",
-      //     "EpochDate": 1591156800,
-      //     "Temperature": {
-      //       "Minimum": {
-      //         "Value": 62,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       },
-      //       "Maximum": {
-      //         "Value": 78,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       }
-      //     },
-      //     "Day": {
-      //       "Icon": 1,
-      //       "IconPhrase": "Sunny",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Night": {
-      //       "Icon": 34,
-      //       "IconPhrase": "Mostly clear",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Sources": [
-      //       "AccuWeather"
-      //     ],
-      //     "MobileLink": "http://m.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=2&lang=en-us",
-      //     "Link": "http://www.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=2&lang=en-us"
-      //   },
-      //   {
-      //     "Date": "2020-06-04T07:00:00+03:00",
-      //     "EpochDate": 1591243200,
-      //     "Temperature": {
-      //       "Minimum": {
-      //         "Value": 67,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       },
-      //       "Maximum": {
-      //         "Value": 83,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       }
-      //     },
-      //     "Day": {
-      //       "Icon": 1,
-      //       "IconPhrase": "Sunny",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Night": {
-      //       "Icon": 33,
-      //       "IconPhrase": "Clear",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Sources": [
-      //       "AccuWeather"
-      //     ],
-      //     "MobileLink": "http://m.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=3&lang=en-us",
-      //     "Link": "http://www.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=3&lang=en-us"
-      //   },
-      //   {
-      //     "Date": "2020-06-05T07:00:00+03:00",
-      //     "EpochDate": 1591329600,
-      //     "Temperature": {
-      //       "Minimum": {
-      //         "Value": 64,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       },
-      //       "Maximum": {
-      //         "Value": 82,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       }
-      //     },
-      //     "Day": {
-      //       "Icon": 1,
-      //       "IconPhrase": "Sunny",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Night": {
-      //       "Icon": 33,
-      //       "IconPhrase": "Clear",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Sources": [
-      //       "AccuWeather"
-      //     ],
-      //     "MobileLink": "http://m.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=4&lang=en-us",
-      //     "Link": "http://www.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=4&lang=en-us"
-      //   },
-      //   {
-      //     "Date": "2020-06-06T07:00:00+03:00",
-      //     "EpochDate": 1591416000,
-      //     "Temperature": {
-      //       "Minimum": {
-      //         "Value": 65,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       },
-      //       "Maximum": {
-      //         "Value": 82,
-      //         "Unit": "F",
-      //         "UnitType": 18
-      //       }
-      //     },
-      //     "Day": {
-      //       "Icon": 1,
-      //       "IconPhrase": "Sunny",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Night": {
-      //       "Icon": 33,
-      //       "IconPhrase": "Clear",
-      //       "HasPrecipitation": false
-      //     },
-      //     "Sources": [
-      //       "AccuWeather"
-      //     ],
-      //     "MobileLink": "http://m.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=5&lang=en-us",
-      //     "Link": "http://www.accuweather.com/en/il/tel-aviv/215854/daily-weather-forecast/215854?day=5&lang=en-us"
-      //   }
-      // ]
     },
-    favoriteNumber() {
-      return this.$store.getters.favoriteCity.length;
+    autocompleteColor(){
+      return this.$vuetify.theme.dark ? 'white' : 'grey'
     },
     isSelectedFavorite() {
       const favoriteCities = this.$store.getters.favoriteCity;
@@ -270,23 +77,23 @@ export default {
 
   watch: {
     search() {
-      if(!this.isEnglish(this.search)){
-        console.log('incondition')
-        this.search = '';
-        return;
-      }
+      // if(!this.isEnglish(this.search)){
+      //   console.log('incondition')
+      //   this.search = '';
+      //   return;
+      // }
        console.log('past')
-      // // Items have already been requested
-      // if (this.isLoading) return;
+      // Items have already been requested
+      if (this.isLoading) return;
 
-      // this.isLoading = true;
+      this.isLoading = true;
 
-      // getAutoCompleteWeather(this.search).then(data => {
-      //   this.entries = data;
-      //   this.items = this.entries.map(e => e.LocalizedName);
-      //   console.log(this.items);
-      //   this.isLoading = false;
-      // });
+      getAutoCompleteWeather(this.search).then(data => {
+        this.entries = data;
+        this.items = this.entries.map(e => e.LocalizedName);
+        console.log(this.items);
+        this.isLoading = false;
+      });
       // setTimeout(() => {
       //   this.entries = [
       //     {
@@ -358,14 +165,12 @@ export default {
   },
   methods: {
     buildPathForIcon(iconNum){
-
       return require(`../assets/weather-icons/${iconNum}-s.png`)
-
     },
-    isEnglish(str){
-      const english = /^[A-Za-z0-9_ ]+$/
-      return  english.test(str);
-    },
+    // isEnglish(str){
+    //   const english = /^[A-Za-z0-9_ ]+$/
+    //   return  english.test(str);
+    // },
     handleUserChoice(name) {
       const cityName = name;
       let cityID = "";
@@ -378,6 +183,7 @@ export default {
       });
     },
     addToFavorite() {
+      console.log(this.selectedCity)
       this.$store.dispatch("addFavoriteCity", this.selectedCity);
     },
     removeFromFavorite() {
@@ -388,15 +194,13 @@ export default {
 </script>
 
 
-
-
-
 <style >
 @media (min-width: 1264px) and (max-width: 3000px) {
   .flex.lg5-custom {
     width: 20%;
     max-width: 20%;
-    flex-basis: 20%;
+    flex-basis: 16%;
+    
   }
 }
 </style>

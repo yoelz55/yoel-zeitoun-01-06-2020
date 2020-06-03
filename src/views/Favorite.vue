@@ -1,21 +1,22 @@
 <template>
   <div class="favorite">
-    <v-layout row wrap class="justify-center" >
-        <v-flex xs10 sm6 md4 lg3 v-for="city in favoriteCities" :key="city.cityID" >
-          <v-card  flat class="yellow text-xs-center ma-4" @click="onSelectFavorite(city.CityID, city.CityName)">
-            <v-card-text >
-              <div class="subheading">{{city.WeatherText}}</div>
-              <div class="grey--text">{{city.CityName}}</div>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-    </v-layout>
+    <v-container>
+      <v-layout row  class="justify-center" >
+          <v-flex  @click="onSelectFavorite(city.CityID, city.CityName)" class= "ma-4" xs10 sm10 md4 lg3 v-for="city in favoriteCities" :key="city.cityID" >
+            <CityCard :weatherPic="buildPathForIcon(city.WeatherIcon)"  :city="city"></CityCard>
+          </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
 
 <script>
+import CityCard from '../components/cards/CityCard'
 export default {
+  components:{
+    CityCard
+  },
   data(){
     return {
     }
@@ -30,6 +31,9 @@ export default {
     onSelectFavorite(cityID, cityName){
       this.$store.dispatch('setCurrentWeather', {cityID: cityID, cityName: cityName})
       this.$router.go(-1)
+    },
+    buildPathForIcon(iconNum){
+      return require(`../assets/weather-icons/${iconNum}-s.png`)
     },
   }
 }
