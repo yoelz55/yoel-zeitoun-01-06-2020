@@ -107,7 +107,11 @@ export default {
           this.entries = data;
           this.items = this.entries.map(e => e.LocalizedName);
           this.isLoading = false;
-        });
+        }).catch(() => {
+          this.$store.dispatch('setViewDialog', true);
+          this.isLoading = false;
+        })
+        ;
       }, 300);
     },
     buildPathForIcon(iconNum) {

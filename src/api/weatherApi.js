@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://dataservice.accuweather.com/';
-const apiKey = '1VYLh2RXTjJTk5CNYYRGIGBthGmOKA0O';
+const baseUrl = 'https://dataservice.accuweather.com/';
+const apiKey = 't1w2MCHJM11w3VhZyLVbclQpfgA9lC51';
 
 export function getAutoCompleteWeather(text) {
   return new Promise(function (resolve, reject) {
