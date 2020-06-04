@@ -8,6 +8,7 @@
         :loading="isLoading"
         :search-input.sync="search"
         :color="autocompleteColor"
+        item-color='secondary'
         hide-no-data
         label="City"
         placeholder="Start typing to Search"
@@ -16,16 +17,16 @@
       ></v-autocomplete>
 
       <v-layout wrap class="justify-center align-center text-center">
-        <v-flex xs10 sm10 md8 lg6 v-if="selectedCity">
+        <v-flex xs10 sm10 md10 lg12 v-if="selectedCity">
           <CityCard :city="selectedCity" :weatherPic="buildPathForIcon(selectedCity.WeatherIcon)"></CityCard>
         </v-flex>
 
-        <v-flex class="mt-4" xs10 sm10 md8 lg6 v-if="selectedCity">
+        <v-flex class="mt-4" xs10 sm10 md10 lg12 v-if="selectedCity">
           <v-avatar class="mr-2">
             <v-icon :class="{red: isSelectedFavorite}">mdi-heart</v-icon>
           </v-avatar>
-          <v-btn rounded v-if="!isSelectedFavorite" @click="addToFavorite">Add to favorite</v-btn>
-          <v-btn rounded v-else @click="removeFromFavorite">Remove From favorite</v-btn>
+          <v-btn  class="secondary" :class="[!isDarkMode? 'black--text': '']" rounded v-if="!isSelectedFavorite" @click="addToFavorite"><span>Add to favorite</span></v-btn>
+          <v-btn class="secondary" :class="[!isDarkMode? 'black--text': '']" rounded v-else @click="removeFromFavorite">Remove From favorite</v-btn>
         </v-flex>
       </v-layout>
 
@@ -73,13 +74,16 @@ export default {
       return this.$store.getters.dailyForecasts;
     },
     autocompleteColor() {
-      return this.$vuetify.theme.dark ? "white" : "grey";
+      return this.isDarkMode ? "white" : "grey";
     },
     isSelectedFavorite() {
       const favoriteCities = this.$store.getters.favoriteCity;
       const favoriteCitiesId = favoriteCities.map(city => city.CityID);
       return favoriteCitiesId.includes(this.selectedCity.CityID);
-    }
+    },
+    isDarkMode() {
+      return this.$vuetify.theme.dark;
+    },
   },
 
   watch: {

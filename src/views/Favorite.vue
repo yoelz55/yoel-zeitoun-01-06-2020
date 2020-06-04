@@ -1,7 +1,7 @@
 <template>
   <div class="favorite">
     <v-container>
-      <v-layout row class="text-center">
+      <v-layout row class="text-center justify-center">
         <v-flex
           v-for="city in favoriteCities"
           :key="city.cityID"

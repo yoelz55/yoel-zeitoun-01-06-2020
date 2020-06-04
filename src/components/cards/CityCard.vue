@@ -1,7 +1,8 @@
 <template>
   <v-card
-    class="mx-auto"
+    class="mx-auto accent"
     max-width="400"
+    :elevation="5"
   >
     <v-list-item two-line>
       <v-list-item-content>

@@ -4,7 +4,6 @@ const baseUrl = 'http://dataservice.accuweather.com/';
 const apiKey = '1VYLh2RXTjJTk5CNYYRGIGBthGmOKA0O';
 
 export function getAutoCompleteWeather(text) {
-  console.log(text)
   return new Promise(function (resolve, reject) {
     const URL = `${baseUrl}locations/v1/cities/autocomplete?apikey=${apiKey}&q=${text}&language=en-us`;
     axios.
@@ -17,68 +16,6 @@ export function getAutoCompleteWeather(text) {
       })
       .catch(err => reject(err))
   });
-  // return [
-  //   {
-  //     "Version": 1,
-  //     "Key": "215613",
-  //     "Type": "City",
-  //     "Rank": 45,
-  //     "LocalizedName": "Ashdod",
-  //     "Country": {
-  //       "ID": "IL",
-  //       "LocalizedName": "Israel"
-  //     },
-  //     "AdministrativeArea": {
-  //       "ID": "D",
-  //       "LocalizedName": "Southern District"
-  //     }
-  //   },
-  //   {
-  //     "Version": 1,
-  //     "Key": "3554509",
-  //     "Type": "City",
-  //     "Rank": 85,
-  //     "LocalizedName": "Ashdown Island",
-  //     "Country": {
-  //       "ID": "CA",
-  //       "LocalizedName": "Canada"
-  //     },
-  //     "AdministrativeArea": {
-  //       "ID": "BC",
-  //       "LocalizedName": "British Columbia"
-  //     }
-  //   },
-  //   {
-  //     "Version": 1,
-  //     "Key": "717302",
-  //     "Type": "City",
-  //     "Rank": 85,
-  //     "LocalizedName": "Ashdon",
-  //     "Country": {
-  //       "ID": "GB",
-  //       "LocalizedName": "United Kingdom"
-  //     },
-  //     "AdministrativeArea": {
-  //       "ID": "ESS",
-  //       "LocalizedName": "Essex"
-  //     }
-  //   },
-  //   {
-  //     "Version": 1,
-  //     "Key": "331849",
-  //     "Type": "City",
-  //     "Rank": 85,
-  //     "LocalizedName": "Ashdown",
-  //     "Country": {
-  //       "ID": "US",
-  //       "LocalizedName": "United States"
-  //     },
-  //     "AdministrativeArea": {
-  //       "ID": "AR",
-  //       "LocalizedName": "Arkansas"
-  //     }
-  //   }
-  // ]
 }
 
 const telAvivDefaultId = '215854';
@@ -99,7 +36,6 @@ export function getCurrentWeather(cityID = telAvivDefaultId, cityName) {
   });
 }
 export function get5DaysForecastsWeather(cityID = telAvivDefaultId, cityName) {
-  console.log('cityID', cityID)
   return new Promise(function (resolve, reject) {
     const URL = `${baseUrl}forecasts/v1/daily/5day/${cityID}?apikey=${apiKey}`;
     axios.

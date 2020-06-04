@@ -1,16 +1,18 @@
 <template>
-  <v-app >
+  <v-app class="primary" style="overflow:hidden">
     <Navbar />
-    <v-content class="primary">
-      <router-view></router-view>
-      <ModalError :dialog="dialog" @close-dialog="closeDialog"/>
+    <v-content class="primary mt-9">
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+      <ModalError :dialog="dialog" @close-dialog="closeDialog" />
     </v-content>
   </v-app>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar";
-import ModalError from "@/components/ModalError"
+import ModalError from "@/components/ModalError";
 import { getLocationFromPosition } from "@/api/weatherApi";
 export default {
   name: "App",
@@ -21,8 +23,8 @@ export default {
   mounted() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
-        this.setTheLocationFromUserPosition,//sucess callback
-        this.setTheLocationToCityDefault//failed callback
+        this.setTheLocationFromUserPosition, //sucess callback
+        this.setTheLocationToCityDefault //failed callback
       );
     } else {
       this.setTheLocationToCityDefault();
@@ -47,13 +49,13 @@ export default {
         });
       });
     },
-    closeDialog(){
+    closeDialog() {
       this.$store.dispatch("setViewDialog", false);
     }
   },
-  computed:{
-    dialog(){
-      return this.$store.getters.viewDialog
+  computed: {
+    dialog() {
+      return this.$store.getters.viewDialog;
     }
   },
   data: () => ({
@@ -61,3 +63,14 @@ export default {
   })
 };
 </script>
+<style scoped>
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(2em);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="344">
+  <v-card class="mx-auto accent" :elevation="5" max-width="344">
     <v-img class="mx-auto" :src="weatherPic" max-width="200px"></v-img>
     <v-card-title>{{day}}</v-card-title>
     <v-card-subtitle class="font-weight-black title">{{temperature}}</v-card-subtitle>

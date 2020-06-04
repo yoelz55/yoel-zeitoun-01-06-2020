@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar app flat>
+    <v-app-bar app class="secondary"> 
       <v-toolbar-title class="text-uppercase">
         <span class="font-weight-light">Herolo Weather App</span>
       </v-toolbar-title>
@@ -21,19 +21,19 @@
         </template>
         <span>Tooltip</span>
       </v-tooltip>
-      <v-menu bottom left>
+      <v-menu bottom left >
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-        <v-list rounded>
+        <v-list rounded class="secondary">
           <v-subheader>More</v-subheader>
           <v-list-item @click="changeTheme">
             <v-list-item-title>{{isDarkMode? 'Light theme': 'Dark theme'}}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="changeUnit">
-            <v-list-item-title>{{isCelsius? 'fahrenheit' : 'Celsius'}}</v-list-item-title>
+            <v-list-item-title>{{isCelsius? 'Fahrenheit' : 'Celsius'}}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
