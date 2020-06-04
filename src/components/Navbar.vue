@@ -27,9 +27,8 @@
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-
         <v-list rounded>
-          <v-subheader>Bonus</v-subheader>
+          <v-subheader>More</v-subheader>
           <v-list-item @click="changeTheme">
             <v-list-item-title>{{isDarkMode? 'Light theme': 'Dark theme'}}</v-list-item-title>
           </v-list-item>

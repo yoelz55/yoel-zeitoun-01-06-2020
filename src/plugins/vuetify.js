@@ -14,7 +14,7 @@ export default new Vuetify({
       },
       dark: {
         
-        primary: '#90CAF9',
+        primary: 'black',
         secondary: '#64B5F6',
         accent: colors.shades.black,
         error: colors.red.accent3,

@@ -12,7 +12,7 @@
 
     <v-card-text>
       <v-row align="center">
-        <v-col class="display-2" cols="6">
+        <v-col class="display-1" cols="6">
           {{temperature}}
         </v-col>
         <v-col cols="6">

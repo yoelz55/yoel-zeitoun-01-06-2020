@@ -9,7 +9,8 @@ export default new Vuex.Store({
     favoriteCity: [],
     selectedCity: null,
     dailyForecasts: null,
-    isCelsius: true
+    isCelsius: true,
+    viewDialog: false
   },
   getters: {
     favoriteCity: state => {
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     },
     isCelsius: state => {
       return state.isCelsius;
+    },
+    viewDialog: state => {
+      return state.viewDialog
     }
   },
   mutations: {
@@ -30,37 +34,53 @@ export default new Vuex.Store({
       state.favoriteCity.push(cityToAdd);
     },
     removeFromFavorite(state, cityToRemove) {
-      state.favoriteCity = state.favoriteCity.filter(city => city.CityID != cityToRemove.CityID)
+      state.favoriteCity = state.favoriteCity.filter(city => city.CityID != cityToRemove.CityID);
     },
     setSelectedCity(state, selectedCity) {
-      state.selectedCity = selectedCity
+      state.selectedCity = selectedCity;
     },
-    setForecast(state, dailyForecasts){
+    setForecast(state, dailyForecasts) {
       state.dailyForecasts = dailyForecasts;
     },
-    toggleUnit(state){
+    toggleUnit(state) {
       state.isCelsius = !state.isCelsius;
+    },
+    setViewDialog(state, viewDialog) {
+      state.viewDialog = viewDialog;
     }
   },
   actions: {
-    toggleUnit({commit}){
+    toggleUnit({ commit }) {
       commit('toggleUnit');
     },
+    setViewDialog({ commit }, viewDialog) {
+      commit('setViewDialog', viewDialog);
+    },
     setSelectedCity({ commit }, selectedCity) {
-      commit('setSelectedCity', selectedCity)
+      commit('setSelectedCity', selectedCity);
     },
     addFavoriteCity({ commit }, cityToAdd) {
-      commit('addFavoriteCity', cityToAdd)
+      commit('addFavoriteCity', cityToAdd);
     },
     removeFromFavorite({ commit }, cityToRemove) {
-      commit('removeFromFavorite', cityToRemove)
+      commit('removeFromFavorite', cityToRemove);
     },
-    async setCurrentWeather({ dispatch, commit }, {cityID, cityName}) {
-      commit('setSelectedCity', await getCurrentWeather(cityID, cityName));
-      dispatch('setCityForecast', {cityID, cityName})
+    async setCurrentWeather({ dispatch, commit }, { cityID, cityName }) {
+      try {
+        commit('setSelectedCity', await getCurrentWeather(cityID, cityName));
+        dispatch('setCityForecast', { cityID, cityName });
+      }
+      catch (error) {
+        dispatch('setViewDialog', true)
+      }
     },
-    async setCityForecast({ commit }, {cityID, cityName}) {
-      commit('setForecast', await get5DaysForecastsWeather(cityID, cityName));
+    async setCityForecast({ dispatch, commit }, { cityID, cityName }) {
+      try {
+        commit('setForecast', await get5DaysForecastsWeather(cityID, cityName));
+      }
+      catch (error) {
+        dispatch('setViewDialog', true)
+      }
     },
   },
 })
